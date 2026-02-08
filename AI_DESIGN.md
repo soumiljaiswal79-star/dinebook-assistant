@@ -5,7 +5,7 @@
 The AI lives in a single **backend edge function** (`supabase/functions/chat/index.ts`). No AI logic runs in the browser — the frontend only sends messages and renders streamed responses.
 
 ```
-Browser (React)  ──POST──►  Edge Function (Deno)  ──POST──►  Lovable AI Gateway
+Browser (React)  ──POST──►  Edge Function (Deno)  ──POST──►   AI Gateway
                  ◄──SSE───                        ◄──SSE───   (Gemini 3 Flash)
 ```
 
@@ -134,7 +134,7 @@ body: JSON.stringify({
 | Too many requests   | 429         | Workspace rate limit exceeded | Toast: "Too many requests"         |
 | No credits          | 402         | Workspace credits exhausted   | Toast: "AI credits exhausted"      |
 | Gateway failure     | 500         | Model error or timeout        | Toast: "Something went wrong"      |
-| Missing API key     | 500         | `LOVABLE_API_KEY` not set     | Server log, generic error to user  |
+| Missing API key     | 500         | `API_KEY` not set             | Server log, generic error to user  |
 | Malformed SSE chunk | —           | Partial JSON in stream        | Buffered and retried on next chunk |
 
 ---
@@ -144,7 +144,7 @@ body: JSON.stringify({
 | Concern                | Mitigation                                                    |
 |------------------------|---------------------------------------------------------------|
 | Prompt injection       | System prompt is server-side only; user input is message-only |
-| API key exposure       | `LOVABLE_API_KEY` is a server-side secret, never sent to browser |
+| API key exposure       | `API_KEY` is a server-side secret, never sent to browser |
 | Response manipulation  | System prompt enforces persona constraints and topic boundaries |
 | Abuse / spam           | Rate limiting (429) at the gateway level                      |
 | Cost control           | Credit-based billing with 402 enforcement                     |
