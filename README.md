@@ -14,8 +14,8 @@ An AI-powered restaurant chatbot that acts as a professional front-desk host, he
 ## 🛠️ Tech Stack
 
 - **Frontend** — React, TypeScript, Vite, Tailwind CSS, shadcn/ui
-- **AI Engine** — Lovable AI Gateway (Gemini 3 Flash) via Edge Functions
-- **Backend** — Lovable Cloud (Supabase) for serverless functions
+- **AI Engine** — Gemini 3 Flash via Edge Functions
+- **Backend** —  Supabase for serverless functions
 - **Styling** — Tailwind CSS with custom design tokens, Framer Motion animations
 
 ## 🚀 Getting Started
