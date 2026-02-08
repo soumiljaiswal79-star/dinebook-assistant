@@ -323,11 +323,6 @@ Test configuration is in `vitest.config.ts` with setup in `src/test/setup.ts`.
 
 ---
 
-## 13. Deployment
-
-- **Frontend**: Published via Lovable's built-in publish flow (click "Publish" → "Update")
-- **Edge Functions**: Deployed automatically on code changes
-- **GitHub Sync**: Bidirectional — changes in Lovable push to GitHub and vice versa
 
 ---
 
