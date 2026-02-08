@@ -9,7 +9,7 @@
 - Check real-time table availability
 - Get chef recommendations and restaurant information
 
-The chatbot uses **Google Gemini 3 Flash** via the Lovable AI Gateway, with responses streamed token-by-token using Server-Sent Events (SSE) for a fluid conversational experience.
+The chatbot uses **Google Gemini 3 Flash** , with responses streamed token-by-token using Server-Sent Events (SSE) for a fluid conversational experience.
 
 ---
 
@@ -19,7 +19,7 @@ The chatbot uses **Google Gemini 3 Flash** via the Lovable AI Gateway, with resp
 
 ```
 ┌─────────────────┐     POST /functions/v1/chat     ┌──────────────────────┐     POST /v1/chat/completions     ┌─────────────────────┐
-│   React SPA     │ ──────────────────────────────► │  Supabase Edge       │ ──────────────────────────────► │  Lovable AI Gateway │
+│   React SPA     │ ──────────────────────────────► │  Supabase Edge       │ ──────────────────────────────► │   AI Gateway │
 │   (Browser)     │ ◄─────────────────────────────  │  Function (Deno)     │ ◄──────────────────────────────  │  Gemini 3 Flash     │
 │                 │     SSE token stream             │                      │     SSE response stream          │                     │
 └─────────────────┘                                  └──────────────────────┘                                  └─────────────────────┘
@@ -41,14 +41,14 @@ The chatbot uses **Google Gemini 3 Flash** via the Lovable AI Gateway, with resp
 
 | Layer            | Technology                                        | Purpose                                |
 |------------------|--------------------------------------------------|----------------------------------------|
-| **UI Framework** | React 18 + TypeScript                            | Component-based SPA                    |
+| **UI Framework** | React 18 + TypeScript                             | Component-based SPA                    |
 | **Build Tool**   | Vite                                              | Fast HMR, ES module bundling           |
 | **Styling**      | Tailwind CSS + custom design tokens               | Utility-first CSS with theming         |
 | **UI Components**| shadcn/ui (Radix primitives)                      | Accessible, composable UI primitives   |
 | **Animations**   | Framer Motion                                     | Message entry animations, hero panel   |
 | **Markdown**     | react-markdown                                    | Rendering bot responses with formatting|
 | **Icons**        | Lucide React                                      | Consistent icon system                 |
-| **Backend**      | Lovable Cloud (Supabase Edge Functions, Deno)     | Serverless AI proxy                    |
+| **Backend**      |  Cloud (Supabase Edge Functions, Deno)            | Serverless AI proxy                    |
 | **AI Model**     | Google Gemini 3 Flash                             | Conversational intelligence            |
 | **Streaming**    | Server-Sent Events (SSE)                          | Token-by-token response delivery       |
 | **Routing**      | React Router DOM v6                               | SPA navigation                         |
@@ -157,7 +157,7 @@ Key behaviors:
 
 ### `supabase/functions/chat/index.ts`
 
-**Purpose**: Proxies chat requests to the Lovable AI Gateway with a restaurant-specific system prompt.
+**Purpose**: Proxies chat requests to the AI Gateway with a restaurant-specific system prompt.
 
 **System Prompt Personality**:
 - Warm, professional front-desk host persona
