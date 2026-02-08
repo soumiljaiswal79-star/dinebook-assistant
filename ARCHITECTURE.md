@@ -2,11 +2,11 @@
 
 ## High-Level Overview
 
-La Maison is a single-page React application that acts as an AI-powered restaurant concierge. Users interact through a chat interface; all intelligence is handled by a backend edge function calling the Lovable AI Gateway (Google Gemini 3 Flash).
+La Maison is a single-page React application that acts as an AI-powered restaurant concierge. Users interact through a chat interface; all intelligence is handled by a backend edge function calling the AI Gateway (Google Gemini 3 Flash).
 
 ```
 ┌─────────────┐       SSE Stream        ┌──────────────────┐       HTTPS        ┌─────────────────────┐
-│   Browser    │ ◄────────────────────── │  Edge Function   │ ◄───────────────── │  Lovable AI Gateway │
+│   Browser    │ ◄────────────────────── │  Edge Function   │ ◄───────────────── │   AI Gateway │
 │  (React SPA) │ ──────────────────────► │  /functions/v1/  │ ──────────────────► │  Gemini 3 Flash     │
 │              │   POST /chat            │  chat            │   POST /v1/chat/   │                     │
 └─────────────┘                          └──────────────────┘   completions      └─────────────────────┘
@@ -21,7 +21,7 @@ La Maison is a single-page React application that acts as an AI-powered restaura
 | Markdown    | react-markdown                                  |
 | Build       | Vite                                            |
 | Backend     | Lovable Cloud (Supabase Edge Functions, Deno)   |
-| AI Model    | Google Gemini 3 Flash via Lovable AI Gateway    |
+| AI Model    | Google Gemini 3 Flash                           |
 | Streaming   | Server-Sent Events (SSE)                        |
 
 ## Directory Structure
