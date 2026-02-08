@@ -20,7 +20,7 @@ La Maison is a single-page React application that acts as an AI-powered restaura
 | Animations  | Framer Motion                                   |
 | Markdown    | react-markdown                                  |
 | Build       | Vite                                            |
-| Backend     | Lovable Cloud (Supabase Edge Functions, Deno)   |
+| Backend     | Cloud (Supabase Edge Functions, Deno)   |
 | AI Model    | Google Gemini 3 Flash                           |
 | Streaming   | Server-Sent Events (SSE)                        |
 
@@ -84,7 +84,7 @@ streamChat() in chatApi.ts
 ```
 supabase/functions/chat/index.ts
   → Prepends system prompt (restaurant persona, menu, rules)
-  → Forwards to Lovable AI Gateway (Gemini 3 Flash)
+  → Forwards to AI Gateway (Gemini 3 Flash)
   → Streams response body back to client
   → Handles 429 (rate limit) and 402 (credits exhausted) errors
 ```
@@ -160,7 +160,7 @@ A fully local, rule-based conversation engine (not currently used in production)
 |----------------------------------|--------------------------------------|
 | `VITE_SUPABASE_URL`             | Backend URL for edge functions       |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Public API key for auth headers      |
-| `LOVABLE_API_KEY` (server-side) | AI Gateway authentication (secret)   |
+| `API_KEY` (server-side)         | AI Gateway authentication (secret)   |
 
 ## Error Handling
 
