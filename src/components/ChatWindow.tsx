@@ -1,21 +1,24 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Send } from "lucide-react";
-import { createBotEngine, type Message } from "@/lib/botEngine";
 import { ChatMessage } from "./ChatMessage";
+import { streamChat } from "@/lib/chatApi";
+import { toast } from "sonner";
 
-const engine = createBotEngine();
+export interface Message {
+  id: string;
+  role: "bot" | "user";
+  content: string;
+  timestamp: Date;
+}
+
+const GREETING = "Welcome to La Maison! I can help you book a table, browse the menu, or check availability. What can I do for you?";
 
 export function ChatWindow() {
   const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "greeting",
-      role: "bot",
-      content: engine.getGreeting(),
-      timestamp: new Date(),
-    },
+    { id: "greeting", role: "bot", content: GREETING, timestamp: new Date() },
   ]);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,36 +28,63 @@ export function ChatWindow() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping, scrollToBottom]);
+  }, [messages, isStreaming, scrollToBottom]);
 
-  const sendMessage = useCallback(() => {
-    const trimmed = input.trim();
-    if (!trimmed) return;
+  /** Convert our Message[] to the API format (only user/assistant) */
+  function toApiMessages(msgs: Message[]) {
+    return msgs
+      .filter((m) => m.id !== "greeting" || m.role === "bot")
+      .map((m) => ({
+        role: m.role === "bot" ? "assistant" as const : "user" as const,
+        content: m.content,
+      }));
+  }
 
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: trimmed,
-      timestamp: new Date(),
-    };
+  const sendMessage = useCallback(
+    async (text?: string) => {
+      const trimmed = (text ?? input).trim();
+      if (!trimmed || isStreaming) return;
 
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setIsTyping(true);
-
-    // Simulate typing delay
-    setTimeout(() => {
-      const response = engine.processMessage(trimmed);
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "bot",
-        content: response,
+      const userMsg: Message = {
+        id: Date.now().toString(),
+        role: "user",
+        content: trimmed,
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 600 + Math.random() * 400);
-  }, [input]);
+
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setIsStreaming(true);
+
+      const botId = (Date.now() + 1).toString();
+      let accumulated = "";
+
+      // Build history including the new user message
+      const history = [...toApiMessages(messages), { role: "user" as const, content: trimmed }];
+
+      await streamChat({
+        messages: history,
+        onDelta: (chunk) => {
+          accumulated += chunk;
+          setMessages((prev) => {
+            const last = prev[prev.length - 1];
+            if (last?.id === botId) {
+              return prev.map((m) => (m.id === botId ? { ...m, content: accumulated } : m));
+            }
+            return [...prev, { id: botId, role: "bot", content: accumulated, timestamp: new Date() }];
+          });
+        },
+        onDone: () => {
+          setIsStreaming(false);
+        },
+        onError: (msg) => {
+          setIsStreaming(false);
+          toast.error(msg);
+        },
+      });
+    },
+    [input, isStreaming, messages]
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -70,7 +100,7 @@ export function ChatWindow() {
         {messages.map((msg) => (
           <ChatMessage key={msg.id} message={msg} />
         ))}
-        {isTyping && (
+        {isStreaming && messages[messages.length - 1]?.role !== "bot" && (
           <div className="flex gap-3 justify-start">
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center mt-1">
               <span className="text-primary-foreground text-xs font-bold">LM</span>
@@ -92,32 +122,9 @@ export function ChatWindow() {
         {["Book a table", "View menu", "Check availability"].map((action) => (
           <button
             key={action}
-            onClick={() => {
-              setInput(action);
-              setTimeout(() => {
-                const userMsg: Message = {
-                  id: Date.now().toString(),
-                  role: "user",
-                  content: action,
-                  timestamp: new Date(),
-                };
-                setMessages((prev) => [...prev, userMsg]);
-                setInput("");
-                setIsTyping(true);
-                setTimeout(() => {
-                  const response = engine.processMessage(action);
-                  const botMsg: Message = {
-                    id: (Date.now() + 1).toString(),
-                    role: "bot",
-                    content: response,
-                    timestamp: new Date(),
-                  };
-                  setMessages((prev) => [...prev, botMsg]);
-                  setIsTyping(false);
-                }, 600);
-              }, 100);
-            }}
-            className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-foreground hover:bg-accent transition-colors font-body"
+            onClick={() => sendMessage(action)}
+            disabled={isStreaming}
+            className="text-xs px-3 py-1.5 rounded-full border border-border bg-card text-foreground hover:bg-accent transition-colors font-body disabled:opacity-40"
           >
             {action}
           </button>
@@ -136,8 +143,8 @@ export function ChatWindow() {
             className="flex-1 bg-card border border-border rounded-xl px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring font-body"
           />
           <button
-            onClick={sendMessage}
-            disabled={!input.trim()}
+            onClick={() => sendMessage()}
+            disabled={!input.trim() || isStreaming}
             className="w-11 h-11 rounded-xl bg-primary text-primary-foreground flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40"
           >
             <Send className="w-4 h-4" />
