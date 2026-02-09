@@ -16,7 +16,7 @@ La Maison is a single-page React application that acts as an AI-powered restaura
 
 | Layer       | Technology                                      |
 |-------------|------------------------------------------------|
-| UI          | React 18, TypeScript, Tailwind CSS, shadcn/ui  |
+| UI          | React 18, TypeScript, Tailwind CSS, shadcn      |
 | Animations  | Framer Motion                                   |
 | Markdown    | react-markdown                                  |
 | Build       | Vite                                            |
@@ -160,7 +160,7 @@ A fully local, rule-based conversation engine (not currently used in production)
 |----------------------------------|--------------------------------------|
 | `VITE_SUPABASE_URL`             | Backend URL for edge functions       |
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Public API key for auth headers      |
-| `API_KEY` (server-side)         | AI Gateway authentication (secret)   |
+| `API_KEY` (server-side)         | AI Gateway authentication            |
 
 ## Error Handling
 
