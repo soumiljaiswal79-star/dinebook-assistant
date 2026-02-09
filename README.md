@@ -38,7 +38,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=<your-supabase-anon-key>
 
 The Edge Function requires a server-side `API_KEY` secret for AI Gateway authentication.
 
-### Installation & Running
+### Installation
 
 ```bash
 # Clone the repository
