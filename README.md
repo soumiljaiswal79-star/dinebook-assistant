@@ -13,10 +13,11 @@ An AI-powered restaurant chatbot that acts as a professional front-desk host, he
 
 ## 🛠️ Tech Stack
 
-- **Frontend** — React, TypeScript, Vite, Tailwind CSS, shadcn/ui
-- **AI Engine** — Gemini 3 Flash via Edge Functions
-- **Backend** —  Supabase for serverless functions
-- **Styling** — Tailwind CSS with custom design tokens, Framer Motion animations
+- **Frontend** — React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui
+- **AI Engine** — Google Gemini 3 Flash via serverless Edge Functions
+- **Backend** — Supabase (Edge Functions, Deno runtime)
+- **Styling** — Tailwind CSS with custom HSL design tokens, Framer Motion animations
+- **Markdown** — react-markdown for rich bot responses
 
 ## 🚀 Getting Started
 
@@ -24,15 +25,27 @@ An AI-powered restaurant chatbot that acts as a professional front-desk host, he
 
 - [Node.js](https://nodejs.org/) (v18+)
 - npm or bun
+- A Supabase project with the `chat` Edge Function deployed
 
-### Installation
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_SUPABASE_URL=<your-supabase-url>
+VITE_SUPABASE_PUBLISHABLE_KEY=<your-supabase-anon-key>
+```
+
+The Edge Function requires a server-side `API_KEY` secret for AI Gateway authentication.
+
+### Installation & Running
 
 ```bash
 # Clone the repository
 git clone <YOUR_GIT_URL>
 
 # Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
+cd la-maison
 
 # Install dependencies
 npm install
@@ -43,30 +56,46 @@ npm run dev
 
 The app will be available at `http://localhost:5173`.
 
+### Build for Production
+
+```bash
+# Create an optimized production build
+npm run build
+
+# Preview the production build locally
+npm run preview
+```
+
+### Running Tests
+
+```bash
+npm run test
+```
+
 ## 🗂️ Project Structure
 
 ```
 src/
 ├── components/          # React components
-│   ├── ChatWindow.tsx   # Main chat interface
-│   ├── ChatMessage.tsx  # Individual message rendering
+│   ├── ChatWindow.tsx   # Main chat interface (state, streaming, input)
+│   ├── ChatMessage.tsx  # Individual message bubble with markdown
 │   └── ui/              # shadcn/ui component library
 ├── data/
-│   └── restaurantData.ts # Menu & restaurant configuration
+│   └── restaurantData.ts # Menu items, availability schedule, helpers
 ├── lib/
-│   ├── chatApi.ts       # Streaming API client (SSE)
+│   ├── chatApi.ts       # SSE streaming client (fetch → ReadableStream → parse)
 │   └── bot/             # Bot engine modules
-│       ├── intents.ts   # Intent detection
+│       ├── intents.ts   # Intent detection (regex-based)
 │       ├── parsers.ts   # Input parsing (dates, times, guests)
 │       └── types.ts     # Type definitions
 ├── pages/
-│   └── Index.tsx        # Landing page
+│   └── Index.tsx        # Landing page (hero + chat split layout)
 └── hooks/               # Custom React hooks
 
 supabase/
 └── functions/
     └── chat/
-        └── index.ts     # AI chat edge function
+        └── index.ts     # AI chat edge function (system prompt + streaming proxy)
 ```
 
 ## 💬 Usage Examples
@@ -77,6 +106,7 @@ supabase/
 | "What's on the menu?" | Highlights popular dishes and categories |
 | "Can I change my reservation to Saturday?" | Modifies the booking seamlessly |
 | "Any vegan options?" | Recommends plant-based dishes |
+| "Do you have anything gluten-free?" | Filters and suggests gluten-free items |
 
 ## 📄 License
 
