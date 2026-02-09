@@ -27,7 +27,7 @@ The chatbot uses **Google Gemini 3 Flash** , with responses streamed token-by-to
 
 ### Request Lifecycle
 
-1. **User types a message** → `ChatWindow.sendMessage()` appends it to local state
+1. **User types a message** → `ChatWindow.sendMessage()` appends to local state
 2. **History is built** → All prior messages are converted to `{ role: "user" | "assistant", content }` format
 3. **`streamChat()`** sends a POST request with the full conversation history to the edge function
 4. **Edge function** prepends a system prompt (restaurant persona, menu data, conversation rules) and forwards to the AI gateway
@@ -330,6 +330,5 @@ Test configuration is in `vitest.config.ts` with setup in `src/test/setup.ts`.
 
 - **Persistent reservations**: Store bookings in a database table with user auth
 - **Chat history**: Persist conversations across sessions
-- **Multi-language support**: i18n for Hindi, English, and other languages
 - **Payment integration**: Accept deposits for premium reservations
 - **Analytics**: Track popular dishes, peak booking times, conversation metrics
