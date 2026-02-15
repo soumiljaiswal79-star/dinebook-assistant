@@ -1,8 +1,8 @@
-# 🍽️ La Maison — AI Restaurant Reservation Assistant
+#  La Maison — AI Restaurant Reservation Assistant
 
 An AI-powered restaurant chatbot that acts as a professional front-desk host, helping guests book, modify, or cancel reservations and answer menu or availability questions with natural, conversational interactions.
 
-## ✨ Features
+##  Features
 
 - **Natural Language Booking** — Book a table by simply chatting (e.g., "Table for 4 on Friday at 8 PM")
 - **Reservation Management** — Modify or cancel existing reservations conversationally
@@ -11,7 +11,7 @@ An AI-powered restaurant chatbot that acts as a professional front-desk host, he
 - **Context-Aware AI** — Remembers conversation context so you never repeat yourself
 - **Streaming Responses** — Token-by-token response rendering for a fluid chat experience
 
-## 🛠️ Tech Stack
+##  Tech Stack Used
 
 - **Frontend** — React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui
 - **AI Engine** — Google Gemini 3 Flash via serverless Edge Functions
@@ -19,7 +19,7 @@ An AI-powered restaurant chatbot that acts as a professional front-desk host, he
 - **Styling** — Tailwind CSS with custom HSL design tokens, Framer Motion animations
 - **Markdown** — react-markdown for rich bot responses
 
-## 🚀 Getting Started
+## Getting Started-
 
 ### Prerequisites
 
@@ -72,7 +72,7 @@ npm run preview
 npm run test
 ```
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 src/
@@ -98,7 +98,7 @@ supabase/
         └── index.ts     # AI chat edge function (system prompt + streaming proxy)
 ```
 
-## 💬 Usage Examples
+##  Usage Examples
 
 | You say | La Maison responds |
 |---|---|
@@ -108,6 +108,6 @@ supabase/
 | "Any vegan options?" | Recommends plant-based dishes |
 | "Do you have anything gluten-free?" | Filters and suggests gluten-free items |
 
-## 📄 License
+##  License
 
 This project is private. All rights reserved.
